@@ -11,9 +11,9 @@ def main():
     # initialize pygame module
     pygame.init()
     # loads and sets the logo
-    logo = pygame.image.load("")
+    logo = pygame.image.load("logo32x32.png")
     pygame.display.set_icon(logo)
-    pygame.display.set_caption("")
+    pygame.display.set_caption("test")
 
     # creates a surface on screen that is 240 x 180 in resolution
     screen = pygame.display.set_mode((240,180))
