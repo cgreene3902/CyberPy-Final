@@ -11,7 +11,7 @@ def main():
     # initialize pygame module
     pygame.init()
     # loads and sets the logo
-    logo = pygame.image.load("logo32x32.png")
+    logo = pygame.image.load("")
     pygame.display.set_icon(logo)
     pygame.display.set_caption("test")
 
