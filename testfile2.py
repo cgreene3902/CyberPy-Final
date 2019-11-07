@@ -24,5 +24,8 @@ class PyView(object):
         self.clock = pygame.time.Clock()
         self.fps = fps
         self.playtime = 0.0
-        self.font ,
-            
+        self.font.SysFont('', 20, bold=true)
+
+    def run(self):
+        """This is the mainloop
+        """
