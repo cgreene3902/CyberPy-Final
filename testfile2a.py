@@ -1,6 +1,6 @@
 """This is a seperate file that will be used
 to test other things without changing the other testfiles
-    This is the first variant on testfile2
+    This is the first variant of testfile2
 """
 
 ####
