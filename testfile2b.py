@@ -31,12 +31,8 @@ class PyView(object):
         # pygame.rect(Surface, color, Rect, width=0)
         # Rect: (x1, y1, width, height)
         #rectangle1_surface = self.rectangle1.convert()
-        pygame.draw.rect(self.background,
-        (200,200,255),
-        (0,380,self.rect1_width,self.rect1_height))
+        pygame.draw.rect(self.background, (200,200,255), (0,380,self.rect1_width,self.rect1_height))
         
-
-
 
 
 
