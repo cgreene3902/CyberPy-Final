@@ -11,7 +11,7 @@ class App(object):
         self._display_surf = None
         self.size = self.width, self.height = 640, 480
 
-    def on_init(self, fps=60):
+    def on_init(self, fps=60): # initializes pygame modules and creates main display
         pygame.init()
         self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
@@ -23,21 +23,21 @@ class App(object):
         self.font = pygame.font.SysFont('mono', 12, bold=True)
         pygame.draw.rect(self._surf_bg, (200,200,255), (0,380,self.width,380))
 
-    def on_event(self, event):
+    def on_event(self, event): # event handler
         if event.type == pygame.QUIT:
             self._running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 self._running = False
     
-    def on_loop(self):
+    def on_loop(self): # controls changes in the game world
         ms = self.clock.tick(self.fps)
         self.playtime += ms / 1000.0
         text = 'FPS: {:6.3}{}PLAYTIME: {:6.3} SECONDS'
         self.text1 = text.format(self.clock.get_fps(), ' '*5, self.playtime)
         
 
-    def on_render(self):
+    def on_render(self): # prints out screen graphics
         surface = self.font.render(self.text1, True, (0, 160, 185))
         self._display_surf.blit(surface, (15 // 2, 15 // 2))
         
@@ -48,7 +48,7 @@ class App(object):
     def on_cleanup(self):
         pygame.quit()
 
-    def on_execute(self):
+    def on_execute(self): # initializes main loop
         if self.on_init() == False:
             self._running = False
     
