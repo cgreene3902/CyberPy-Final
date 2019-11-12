@@ -49,8 +49,10 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     # if user pressed ESC, close window
                     running = False 
+        fps = 20
         clock = pygame.time.Clock()
-        ms = clock.tick(20)
+        ms = clock.tick(fps)
+        pltime = 0.0
         pltime += ms / 1000.0
 
 if __name__=="__main__":
