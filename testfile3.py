@@ -4,7 +4,7 @@ way for me to structure the code
 import pygame
 import os
 import random
-
+import time
 ####
 class App(object):
     def __init__(self):
@@ -25,6 +25,8 @@ class App(object):
         self.x, self.y = 600, (self.height/2 - self.player_rect_size_h/2) #player rect_start_pos
         self.x_speed, self.y_speed = 10, 10
         self.x1, self.y1 = 20, (self.height/2 - self.player_rect_size_h/2)
+        self.ball_w, self.ball_h = 20, 20
+        self.ball_x, self.ball_y = (self.width/2 - self.ball_w/2), (self.height/2 - self.ball_h/2)
         self.pressed_keys = {"a": False, "d": False, "w": False,
         "s": False, "left": False, "right": False, "up": False, "down": False}
         self.clock = pygame.time.Clock()
@@ -46,7 +48,10 @@ class App(object):
                 self.x_speed, self.y_speed = 10, 10
                 self.x1, self.y1 = 20, (self.height/2 - self.player_rect_size_h/2)
                 self.x, self.y = self.width - 40, (self.height/2 - self.player_rect_size_h/2)
+                self.ball_w, self.ball_h = 20, 20
+                self.ball_x, self.ball_y = (self.width/2 - self.ball_w/2), (self.height/2 - self.ball_h/2)
                 
+
             if event.key == pygame.K_2:
                 self.size =  self.width, self.height = 1280, 720
                 self._screen = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
@@ -56,7 +61,10 @@ class App(object):
                 self.x_speed, self.y_speed = 15, 15
                 self.x1, self.y1 = 40, (self.height/2 - self.player_rect_size_h/2)
                 self.x, self.y = self.width - 80, (self.height/2 - self.player_rect_size_h/2)
-            
+                self.ball_w, self.ball_h = 20*2, 20*2
+                self.ball_x, self.ball_y = (self.width/2 - self.ball_w/2), (self.height/2 - self.ball_h/2)
+                
+
             if event.key == pygame.K_3:
                 self.fps = 60
             
@@ -114,7 +122,7 @@ class App(object):
             
             if event.key == pygame.K_DOWN:
                 self.pressed_keys["down"] = False
-            
+        
     def key_press_events(self):
         if self.fps == 150:
             self.speed_reduction = 0.1
@@ -138,7 +146,7 @@ class App(object):
         if self.pressed_keys["down"] == True:
             if self.y + self.y_speed <= (self.height/2 + self.player_rect_size_h/5 + 125): 
                 self.y += self.y_speed * self.speed_reduction
-
+        
         if self.pressed_keys["w"] == True:
             if self.y1 - self.y_speed >= -5:
                 self.y1 -= self.y_speed * self.speed_reduction
@@ -146,15 +154,27 @@ class App(object):
         if self.pressed_keys["s"] == True:
             if self.y1 + self.y_speed <= (self.height/2 + self.player_rect_size_h/5 + 125):
                 self.y1 += self.y_speed * self.speed_reduction
-
+        
+        if self.ball_y - self.y1 < 0:
+            if self.y1 - self.y_speed >= -5:
+                self.y1 -= self.y_speed // 2
     
+        if self.ball_y - self.y1 > 0:
+            if self.y1 + self.y_speed <= (self.height/2 + self.player_rect_size_h/5 + 125):
+                self.y1 += self.y_speed // 2
+        
     def on_loop(self): # controls changes in the game world
+        self.rand_num = random.randint(1,4)
         self._surface1.fill((15,15,15))
+        
+        self.ball_rect = pygame.Rect(self.ball_x,self.ball_y,self.ball_w,self.ball_h)
+        pygame.draw.rect(self._surface1, (230,230,230), self.ball_rect)
         pygame.draw.rect(self._surface1, (150,150,150), ((self.width/2),0,1,self.height))
         pygame.draw.rect(self._surface1, (150,150,150), (0,self.height-1,self.width,1.5))
         pygame.draw.rect(self._surface1, (150,150,150), (0,(self.height-self.height),self.width,1.5))
-        pygame.draw.rect(self._surface1, (200,200,200), (self.x,self.y,self.player_rect_size_w,self.player_rect_size_h)) #player 1
-        pygame.draw.rect(self._surface1, (200,200,200), (self.x1,self.y1,self.player_rect_size_w,self.player_rect_size_h)) #player 2
+        self.player_rect1 = pygame.draw.rect(self._surface1, (200,200,200), (self.x,self.y,self.player_rect_size_w,self.player_rect_size_h)) #player 1
+        self.player_rect2 = pygame.draw.rect(self._surface1, (200,200,200), (self.x1,self.y1,self.player_rect_size_w,self.player_rect_size_h)) #player 2
+        
         #
         self.ms = self.clock.tick(self.fps)
         self.seconds += self.ms / 1000
@@ -165,9 +185,36 @@ class App(object):
             self.seconds = 0
             self.seconds += self.ms / 1000
             
-        pygame.display.set_caption('FPS: %.2f Time: %.0f:%.2f Player_pos: %.0f,%.0f' % (self.clock.get_fps(), self.minutes, self.seconds, self.x, self.y))
+        pygame.display.set_caption('P2_pos_y: %.0f | Ball_pos: %.0f,%.0f | FPS: %.2f | Time: %.0f:%.2f' % (self.y1,
+        self.ball_x, self.ball_y, self.clock.get_fps(), self.minutes, self.seconds))
         self.text1 = text.format(self.clock.get_fps(), ' '*5, self.minutes, self.seconds, ' '*5)
         #
+        
+        if self.rand_num == 1:
+            if self.ball_x + self.x_speed <= self.width - self.ball_w:
+                self.ball_x += self.x_speed / 2
+        
+        if self.rand_num == 2:
+            if self.ball_x - self.x_speed >= 0:
+                self.ball_x -= self.x_speed / 2
+        
+        if self.rand_num == 3:
+            if self.ball_y - self.y_speed >= 0:
+                self.ball_y -= self.y_speed / 2
+        
+        if self.rand_num == 4:
+            if self.ball_y + self.y_speed <= self.height - self.ball_h:
+                self.ball_y += self.y_speed / 2
+
+    def rect_collide_test(self):
+        pass
+        #self.Ball = pygame.Rect.colliderect(self.ball_rect)
+
+
+
+
+
+
     def on_render(self): # prints out screen graphics
         #
         surface = self.font.render(self.text1, True, (0, 255, 255))
@@ -191,6 +238,8 @@ class App(object):
             self.key_press_events()
             
             self.on_loop() #
+            
+            self.rect_collide_test()
             
             self.on_render() # calls objects in on_render to be rendered
         
