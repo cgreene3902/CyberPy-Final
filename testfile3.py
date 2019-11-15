@@ -4,7 +4,7 @@ way for me to structure the code
 import pygame
 import os
 import random
-import time
+
 ####
 class App(object):
     def __init__(self):
@@ -22,10 +22,11 @@ class App(object):
         self.seconds = 0
         self.minutes = 0
         self.font = pygame.font.SysFont('mono', 12, bold=True)
-        self.x, self.y = 615, 120 #player rect_start_pos
-        self.player_rect_size_w, self.player_rect_size_h = 20, 250
+        self.player_rect_size_w, self.player_rect_size_h = 20, 100
+        self.x, self.y = 600, (self.height/2 - self.player_rect_size_h/2) #player rect_start_pos
+        self.x_speed = 10
+        self.y_speed = 10
         self.x1, self.y1 = 1, 1
-        self.x2, self.y2 = 0, 0
         self.pressed_keys = {"a": False, "d": False, "w": False, "s": False, "left": False,
                              "right": False, "up": False, "down": False}
         self._surface1.fill((50,50,50))
@@ -41,12 +42,33 @@ class App(object):
                 self._running = False
             
             if event.key == pygame.K_1:
-                self.fps = 30
-            
+                self.size = self.width, self.height = 640, 480
+                self._screen = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+                self._bg = pygame.Surface(self._screen.get_size()).convert()
+                self._surface1 = pygame.Surface(self._bg.get_size()).convert()
+                self.player_rect_size_w, self.player_rect_size_h = 20, 100
+                self.x_speed = 10
+                self.y_speed = 10
+                self.x, self.y = self.width - 40, (self.height/2 - self.player_rect_size_h/2)
+                self._surface1.fill((50,50,50))
+                self._bg.blit(self._surface1, (0, 0))
+
             if event.key == pygame.K_2:
-                self.fps = 60
+                self.size =  self.width, self.height = 1280, 720
+                self._screen = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+                self._bg = pygame.Surface(self._screen.get_size()).convert()
+                self._surface1 = pygame.Surface(self._bg.get_size()).convert()
+                self.player_rect_size_w, self.player_rect_size_h = int(20*1.75), int(100*2)
+                self.x_speed = 15
+                self.y_speed = 15
+                self.x, self.y = self.width - 80, (self.height/2 - self.player_rect_size_h/2)
+                self._surface1.fill((50,50,50))
+                self._bg.blit(self._surface1, (0, 0))
             
             if event.key == pygame.K_3:
+                self.fps = 60
+            
+            if event.key == pygame.K_4:
                 self.fps = 120
             
             if event.key == pygame.K_a:
@@ -108,34 +130,38 @@ class App(object):
         if self.fps == 30:
             self.speed_reduction = 0.1
 
+        #if self.pressed_keys["left"] == True:
+            #self.x -= self.x_speed * self.speed_reduction
+        
+        #if self.pressed_keys["right"] == True:
+            #self.x += self.x_speed * self.speed_reduction
+        
+        if self.pressed_keys["up"] == True:
+            if self.y - self.y_speed >= -5:
+                self.y -= self.y_speed * self.speed_reduction
+        
+        if self.pressed_keys["down"] == True:
+            if self.y + self.y_speed <= (self.height/2 + self.player_rect_size_h/5 + 125): #283
+                self.y += self.y_speed * self.speed_reduction
+        '''
         if self.pressed_keys["a"] == True:
-            self.x -= 10 * self.speed_reduction
+            self.player_rect_size_w -= 5
         
         if self.pressed_keys["d"] == True:
-            self.x += 10 * self.speed_reduction
-        
-        if self.pressed_keys["w"] == True:
-            self.y -= 10 * self.speed_reduction
-        
-        if self.pressed_keys["s"] == True:
-            self.y += 10 * self.speed_reduction
-
-        if self.pressed_keys["left"] == True:
             self.player_rect_size_w += 5
-        
-        if self.pressed_keys["right"] == True:
-            self.player_rect_size_w -= 5
 
-        if self.pressed_keys["up"] == True:
-            self.player_rect_size_h += 5
-
-        if self.pressed_keys["down"] == True:
+        if self.pressed_keys["w"] == True:
             self.player_rect_size_h -= 5
 
+        if self.pressed_keys["s"] == True:
+            self.player_rect_size_h += 5
+        '''
+    
     def on_loop(self): # controls changes in the game world
         self._surface1.fill((50,50,50))
-        pygame.draw.rect(self._surface1, (0,0,0), ((self.width/2),0,1,480))
-        pygame.draw.rect(self._surface1, (0,0,0), (0,(self.height/2),640,1))
+        pygame.draw.rect(self._surface1, (150,150,150), ((self.width/2),0,1,self.height))
+        pygame.draw.rect(self._surface1, (150,150,150), (0,self.height-1,self.width,1.5))
+        pygame.draw.rect(self._surface1, (150,150,150), (0,(self.height-self.height),self.width,1.5))
         pygame.draw.rect(self._surface1, (255,255,255), (self.x,self.y,self.player_rect_size_w,self.player_rect_size_h))
         #
         self.ms = self.clock.tick(self.fps)
@@ -147,7 +173,7 @@ class App(object):
             self.seconds = 0
             self.seconds += self.ms / 1000
             
-        pygame.display.set_caption('FPS: %.2f Time: %.0f:%.2f' % (self.clock.get_fps(), self.minutes, self.seconds))
+        pygame.display.set_caption('FPS: %.2f Time: %.0f:%.2f Player_pos: %.0f,%.0f' % (self.clock.get_fps(), self.minutes, self.seconds, self.x, self.y))
         self.text1 = text.format(self.clock.get_fps(), ' '*5, self.minutes, self.seconds, ' '*5)
         #
     def on_render(self): # prints out screen graphics
