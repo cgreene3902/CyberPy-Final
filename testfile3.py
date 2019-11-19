@@ -155,16 +155,18 @@ class App(object):
             if self.y1 + self.y_speed <= (self.height/2 + self.player_rect_size_h/5 + 125):
                 self.y1 += self.y_speed * self.speed_reduction
         
-        if self.ball_y - self.y1 < 0:
+        ###
+        if (self.ball_y+self.ball_h/2) - (self.y1+self.player_rect_size_h/2) < 0:
             if self.y1 - self.y_speed >= -5:
-                self.y1 -= self.y_speed // 2
+                self.y1 -= self.y_speed // 5
     
-        if self.ball_y - self.y1 > 0:
+        if (self.ball_y+self.ball_h/2) - (self.y1+self.player_rect_size_h/2) > 0:
             if self.y1 + self.y_speed <= (self.height/2 + self.player_rect_size_h/5 + 125):
-                self.y1 += self.y_speed // 2
-        
+                self.y1 += self.y_speed // 5
+        ###
+
     def on_loop(self): # controls changes in the game world
-        self.rand_num = random.randint(1,4)
+        #self.rand_num = random.randint(1,4)
         self._surface1.fill((15,15,15))
         
         self.ball_rect = pygame.Rect(self.ball_x,self.ball_y,self.ball_w,self.ball_h)
@@ -175,6 +177,7 @@ class App(object):
         self.player_rect1 = pygame.draw.rect(self._surface1, (200,200,200), (self.x,self.y,self.player_rect_size_w,self.player_rect_size_h)) #player 1
         self.player_rect2 = pygame.draw.rect(self._surface1, (200,200,200), (self.x1,self.y1,self.player_rect_size_w,self.player_rect_size_h)) #player 2
         
+
         #
         self.ms = self.clock.tick(self.fps)
         self.seconds += self.ms / 1000
@@ -190,6 +193,7 @@ class App(object):
         self.text1 = text.format(self.clock.get_fps(), ' '*5, self.minutes, self.seconds, ' '*5)
         #
         
+        '''
         if self.rand_num == 1:
             if self.ball_x + self.x_speed <= self.width - self.ball_w:
                 self.ball_x += self.x_speed / 2
@@ -205,14 +209,8 @@ class App(object):
         if self.rand_num == 4:
             if self.ball_y + self.y_speed <= self.height - self.ball_h:
                 self.ball_y += self.y_speed / 2
-
-    def rect_collide_test(self):
-        pass
-        #self.Ball = pygame.Rect.colliderect(self.ball_rect)
-
-
-
-
+        '''
+        
 
 
     def on_render(self): # prints out screen graphics
@@ -238,8 +236,6 @@ class App(object):
             self.key_press_events()
             
             self.on_loop() #
-            
-            self.rect_collide_test()
             
             self.on_render() # calls objects in on_render to be rendered
         
