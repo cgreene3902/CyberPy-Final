@@ -138,7 +138,7 @@ class App(object):
             if self.pressed_keys["s"] == True:
                 if self.y1 + self.rect_speed <= (self.height/2 + self.player_rect_size_h/5 + 125):
                     self.y1 += self.rect_speed / self.speed_reduction
-        """ai_player is work in progress
+        #"""ai_player is work in progress
         if self.ai_player == True:
             if (self.ball_y+self.ball_h/2) - (self.y1+self.player_rect_size_h/2) < 25:
                 if self.y1 - self.rect_speed >= -5:
@@ -156,13 +156,12 @@ class App(object):
             if (self.ball_y+self.ball_h/2) - (self.y+self.player_rect_size_h/2) > 25:
                 if self.y + self.rect_speed <= (self.height/2 + self.player_rect_size_h/5 + 125):
                     self.y += self.rect_speed // 5
-        """
+        #"""
 
     def on_loop(self): # controls changes in the game world
         self._surface1.fill((15,15,15))
         
         self.ball_rect = pygame.Rect(self.ball_x,self.ball_y,self.ball_w,self.ball_h)
-        pygame.draw.rect(self._surface1, (255,255,255), (self.width/2 - 5, self.height/2 - 5, 10, 10))
         pygame.draw.rect(self._surface1, (230,230,230), self.ball_rect)
         pygame.draw.rect(self._surface1, (150,150,150), ((self.width/2),0,1,self.height))
         pygame.draw.rect(self._surface1, (150,150,150), (0,self.height-1,self.width,1.5))
