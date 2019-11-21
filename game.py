@@ -27,7 +27,7 @@ class App(object):
         self.x1, self.y1 = 20, (self.height/2 - self.player_rect_size_h/2)
         self.ball_w, self.ball_h = 20, 20
         self.ball_x, self.ball_y = (self.width/2 - self.ball_w/2), (self.height/2 - self.ball_h/2)
-        self.pressed_keys = {"w": False, "s": False, "up": False, "down": False, "[": False}
+        self.pressed_keys = {"w": False, "s": False, "up": False, "down": False}
         self.clock = pygame.time.Clock()
         self.score1, self.score2 = 0, 0
         self.ball_rect = pygame.Rect(self.ball_x,self.ball_y,self.ball_w,self.ball_h)
