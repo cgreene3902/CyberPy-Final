@@ -164,23 +164,22 @@ class App(object):
         self.ball_rect = pygame.Rect(self.ball_x,self.ball_y,self.ball_w,self.ball_h)
         pygame.draw.rect(self._surface1, (230,230,230), self.ball_rect)
         pygame.draw.rect(self._surface1, (150,150,150), ((self.width/2),0,1,self.height))
-        pygame.draw.rect(self._surface1, (150,150,150), (0,self.height-1,self.width,1.5))
-        pygame.draw.rect(self._surface1, (150,150,150), (0,(self.height-self.height),self.width,1.5))
+        pygame.draw.rect(self._surface1, (150,150,150), (0,0,self.width,self.height), 5)
         self.player_rect1 = pygame.draw.rect(self._surface1, (200,200,200), (self.x,self.y,self.player_rect_size_w,self.player_rect_size_h)) #player 1
         self.player_rect2 = pygame.draw.rect(self._surface1, (200,200,200), (self.x1,self.y1,self.player_rect_size_w,self.player_rect_size_h)) #player 2
         
         self.ms = self.clock.tick(self.fps)
         self.seconds += self.ms / 1000
-        text = 'FPS: {:6.4}{}PLAYTIME: {}:{:3.3} {}'
+        text = 'player 1 score: {}{} player 2 score: {}'
         
         if self.seconds >= 60:
             self.minutes += 1
             self.seconds = 0
             self.seconds += self.ms / 1000
             
-        pygame.display.set_caption('| FPS: %.2f | Time: %.0f:%.2f | score p1, p2: %.0f, %.0f' % (
+        pygame.display.set_caption('| FPS: %.2f | Time: %.0f:%.2f | score p1, p2: %.0f, %.0f |' % (
         self.clock.get_fps(), self.minutes, self.seconds, self.score1, self.score2))
-        self.text1 = text.format(self.clock.get_fps(), ' '*5, self.minutes, self.seconds, ' '*5)
+        self.text1 = text.format(self.score1,' ', self.score2)
         
         if self.direction == 1:
             self.ball_x += self.ball_speed/5
@@ -233,7 +232,7 @@ class App(object):
     def on_render(self): # prints out screen graphics
         
         surface = self.font.render(self.text1, True, (0, 255, 255))
-        self._screen.blit(surface, (15 // 2, 15 // 2))
+        self._screen.blit(surface, (self.width // 4, 15 // 2))
         
         pygame.display.update()
         self._screen.blit(self._bg, (0,0))
