@@ -223,11 +223,12 @@ class App(object):
 
         if self.score1 >= 11 and self.score1 > self.score2 + 2:
             print('player 1 wins')
+            self._running=False
             
         
         if self.score2 >= 11 and self.score2 > self.score1 + 2:
             print('player 2 wins')
-            
+            self._running=False
 
     def on_render(self): # prints out screen graphics
         
